@@ -16,7 +16,20 @@
 (evil-ex-define-cmd "neo" 'neotree-toggle)
 (evil-ex-define-cmd "gst" 'magit-status)
 
+(add-to-list 'auto-mode-alist '("\.tsx\'" . web-mode))
+
 (setq-hook! 'typescript-mode-hook typescript-indent-level 2)
 (setq-hook! 'javascript-mode-hook js-indent-level 2)
+
+(add-hook! 'web-mode-hook
+          (lambda ()
+            (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              (setup-tide-mode)
+              (typescript-mode)
+              )))
+
+(add-hook! 'org-mode-hook)
+
+(setq magit-refresh-status-buffer nil)
 
 (toggle-frame-fullscreen)
