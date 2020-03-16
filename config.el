@@ -20,6 +20,10 @@
 
 (setq-hook! 'typescript-mode-hook typescript-indent-level 2)
 (setq-hook! 'javascript-mode-hook js-indent-level 2)
+(setq-hook! 'magit-mode-hook git-commit-summary-max-length 100)
+(setq-hook! 'magit-mode-hook magit-refresh-status-buffer nil)
+(setq-hook! 'web-mode-hook web-mode-markup-indent-offset 2)
+(setq-hook! 'web-mode-hook typescript-indent-level 2)
 
 (add-hook! 'web-mode-hook
           (lambda ()
@@ -28,8 +32,5 @@
               (typescript-mode)
               )))
 
-(add-hook! 'org-mode-hook)
-
-(setq magit-refresh-status-buffer nil)
 
 (toggle-frame-fullscreen)
