@@ -18,13 +18,21 @@
 
 (add-to-list 'auto-mode-alist '("\.tsx\'" . web-mode))
 
+(setq doom-theme 'doom-dark+)
 (setq-hook! 'typescript-mode-hook typescript-indent-level 2)
 (setq-hook! 'javascript-mode-hook js-indent-level 2)
 (setq-hook! 'magit-mode-hook git-commit-summary-max-length 100)
 (setq-hook! 'magit-mode-hook magit-refresh-status-buffer nil)
 (setq-hook! 'web-mode-hook web-mode-markup-indent-offset 2)
 (setq-hook! 'web-mode-hook typescript-indent-level 2)
-
+(setq-hook! 'typescript-mode-hook tide-format-options
+            '(
+              :includeCompletionsForModuleExports t
+              :includeCompletionsWithInsertText t
+              :allowTextChangesInNewFiles t
+              :quotePreference "single"
+              )
+            )
 (add-hook! 'web-mode-hook
           (lambda ()
             (when (string-equal "tsx" (file-name-extension buffer-file-name))
