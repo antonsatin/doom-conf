@@ -17,14 +17,15 @@
 (evil-ex-define-cmd "gst" 'magit-status)
 
 (add-to-list 'auto-mode-alist '("\.tsx\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\.yml\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\.proto\'" . protobuf-mode))
 
 (setq doom-theme 'doom-dark+)
+(setq doom-font
+      (font-spec :family "Fira Code" :size 12)
+      )
+
 (setq-hook! 'typescript-mode-hook typescript-indent-level 2)
-(setq-hook! 'javascript-mode-hook js-indent-level 2)
-(setq-hook! 'magit-mode-hook git-commit-summary-max-length 100)
-(setq-hook! 'magit-mode-hook magit-refresh-status-buffer nil)
-(setq-hook! 'web-mode-hook web-mode-markup-indent-offset 2)
-(setq-hook! 'web-mode-hook typescript-indent-level 2)
 (setq-hook! 'typescript-mode-hook tide-format-options
             '(
               :includeCompletionsForModuleExports t
@@ -33,6 +34,12 @@
               :quotePreference "single"
               )
             )
+(setq-hook! 'javascript-mode-hook js-indent-level 2)
+(setq-hook! 'magit-mode-hook git-commit-summary-max-length 100)
+(setq-hook! 'magit-mode-hook magit-refresh-status-buffer nil)
+(setq-hook! 'web-mode-hook web-mode-markup-indent-offset 2)
+(setq-hook! 'web-mode-hook web-mode-code-indent-offset 2)
+(setq-hook! 'web-mode-hook typescript-indent-level 2)
 (add-hook! 'web-mode-hook
           (lambda ()
             (when (string-equal "tsx" (file-name-extension buffer-file-name))
