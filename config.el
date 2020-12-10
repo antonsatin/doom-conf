@@ -20,6 +20,11 @@
 (add-to-list 'auto-mode-alist '("\.yml\'" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\.proto\'" . protobuf-mode))
 
+(map! :map dired-mode-map
+      "C-j" 'dired-find-file
+      "C-k" 'dired-up-directory
+ )
+
 (setq doom-theme 'doom-dark+)
 (setq doom-font
       (font-spec :family "Fira Code" :size 12)
@@ -40,6 +45,8 @@
 (setq-hook! 'web-mode-hook web-mode-markup-indent-offset 2)
 (setq-hook! 'web-mode-hook web-mode-code-indent-offset 2)
 (setq-hook! 'web-mode-hook typescript-indent-level 2)
+(add-hook! 'elixir-mode-hook
+           (add-to-list 'exec-path "~/elixir-ls/release"))
 (add-hook! 'web-mode-hook
           (lambda ()
             (when (string-equal "tsx" (file-name-extension buffer-file-name))
