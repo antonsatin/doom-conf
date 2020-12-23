@@ -21,7 +21,7 @@
 (add-to-list 'auto-mode-alist '("\.proto\'" . protobuf-mode))
 
 (map! :map dired-mode-map
-      "C-j" 'dired-find-file
+      "C-j" 'dired-find-alternate-file
       "C-k" 'dired-up-directory
  )
 
@@ -47,6 +47,10 @@
 (setq-hook! 'web-mode-hook typescript-indent-level 2)
 (add-hook! 'elixir-mode-hook
            (add-to-list 'exec-path "~/elixir-ls/release"))
+
+(add-hook! 'elixir-mode-hook
+          (lambda () (add-hook! 'before-save-hook 'elixir-format nil t)))
+
 (add-hook! 'web-mode-hook
           (lambda ()
             (when (string-equal "tsx" (file-name-extension buffer-file-name))
