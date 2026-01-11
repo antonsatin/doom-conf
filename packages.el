@@ -8,5 +8,8 @@
 (package! po-mode)
 (package! jenkinsfile-mode)
 ;; (package! vue-mode)
-(package! copilot
-  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+;; (package! copilot
+;;   :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+(package! lsp-origami)
+
+(package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))

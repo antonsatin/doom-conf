@@ -18,9 +18,10 @@
 
 ;; (add-to-list 'auto-mode-alist '("\.tsx\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\.yml\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\.yml.erb\'" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\.proto\'" . protobuf-mode))
 (add-to-list 'auto-mode-alist '("\.po\'" . po-mode))
-(add-to-list 'auto-mode-alist '("Jenkins*'" . jenkinsfile-mode))
+(add-to-list 'auto-mode-alist '("/jenkins.+\'" . jenkinsfile-mode))
 
 (map! :map dired-mode-map
       "C-j" 'dired-find-alternate-file
@@ -36,7 +37,7 @@
       'copy-filename-to-clipboard)
 (map! :leader
       "b f"
-      'lsp-format-buffer
+      'elixir-format
       )
 
 (setq doom-theme 'doom-dark+)
@@ -69,7 +70,7 @@
 
 ;; (setq-hook! 'elixir-mode-hook +format-with-lsp t)
 
-(add-hook! 'elixir-mode-hook
+(add-hook! 'elixir-ts-mode-hook
            (add-to-list 'exec-path "~/.elixir-ls"))
 
 ;; (add-hook! 'after-save-hook (lambda () (if (eq major-mode 'elixir-mode) (lsp-format-buffer))))
@@ -82,7 +83,7 @@
 ;;               (typescript-mode)
 ;;               )))
 
-(after! elixir-mode (set-company-backend! 'elixir-mode nil))
+(after! elixir-ts-mode (set-company-backend! 'elixir-ts-mode nil))
 ;; (after! elixir-mode (set-company-backend! 'elixir-mode nil))
 
 (defun copy-filename-to-clipboard ()
@@ -98,15 +99,63 @@
       (message filename))))
 
 (setq projectile-generic-command "fd . -0 --type f --color=never")
-(setq lsp-elixir-ls-download-url "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.11.0/elixir-ls.zip")
-(add-hook 'elixir-mode-hook 'copilot-mode)
+
+(setq lsp-elixir-local-server-command "~/Work/elixir_ls/elixir-ls-v0.29.3/language_server.sh")
+;; (setq lsp-elixir-ls-version "v0.29.3")
+;; (setq
+;;  lsp-elixir-ls-download-url
+;;  "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.28.1/elixir-ls-v0.26.2.zip"
+;;  )
+;; (add-hook 'elixir-mode-hook 'copilot-mode)
+;; (add-hook! 'ruby-mode-hook (flycheck-disable-checker 'ruby-reek))
+;; (add-hook! 'ruby-mode-hook (flycheck-disable-checker 'ruby-rubocop))
 ;; (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 
 ;; accept completion from copilot and fallback to company
-(use-package! copilot
-  :hook (prog-mode . copilot-mode)
-  :bind (("C-TAB" . 'copilot-accept-completion-by-word)
-         ("C-<tab>" . 'copilot-accept-completion-by-word)
-         :map copilot-completion-map
-         ("<tab>" . 'copilot-accept-completion)
-         ("TAB" . 'copilot-accept-completion)))
+;; (use-package! copilot
+;;   :hook (prog-mode . copilot-mode)
+;;   :bind (("C-TAB" . 'copilot-accept-completion-by-word)
+;;          ("C-<tab>" . 'copilot-accept-completion-by-word)
+;;          ("C-s-l" . 'copilot-accept-completion)
+;;          ("C-s-l" . 'copilot-accept-completion)
+;;          ))
+(setq doom-theme 'doom-solarized-light)
+;; Enable folding
+(setq lsp-enable-folding t)
+
+
+
+;; (setq copilot-indent-offset-warning-disable t)
+(setq git-commit-summary-max-length 120)
+;; (flycheck-disable-checker 'ruby-reek)
+;; (setq flycheck-disabled-checkers, '(ruby-reek))
+
+;; Add origami and LSP integration
+;; (use-package! lsp-origami)
+;; (add-hook! 'lsp-after-open-hook #'lsp-origami-try-enable)
+
+;; (after! smartparens
+;;   (sp-with-modes '(elixir-ts-mode)
+;;     (sp-local-pair "\"\"\"" "\"\"\"" :trigger "\"\"\"")))
+;; Localleader: SPC m t … for ExUnit in elixir-ts-mode and heex-ts-mode
+(after! elixir-ts-mode
+  (map! :map elixir-ts-mode-map
+        :localleader
+        (:prefix ("t" . "test")
+        "a" #'exunit-verify-all
+        "r" #'exunit-rerun
+        "v" #'exunit-verify
+        "T" #'exunit-toggle-file-and-test
+        "t" #'exunit-toggle-file-and-test-other-window
+        "s" #'exunit-verify-single)))
+
+(with-eval-after-load 'heex-ts-mode
+  (map! :map heex-ts-mode-map
+        :localleader
+        (:prefix ("t" . "test")
+        "a" #'exunit-verify-all
+        "r" #'exunit-rerun
+        "v" #'exunit-verify
+        "T" #'exunit-toggle-file-and-test
+        "t" #'exunit-toggle-file-and-test-other-window
+        "s" #'exunit-verify-single)))
